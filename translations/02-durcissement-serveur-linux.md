@@ -7,7 +7,7 @@ Les infrastructures critiques tournent souvent sur des serveurs Linux anciens ou
 - **Budget et matériel limités** : pas de budget pour des outils commerciaux ni des redémarrages fréquents.
 - **Menaces courantes** : rançongiciels (exemple : l'attaque récente contre la DAF), hameçonnage menant à un accès initial, attaques par force brute sur SSH.
 
-**Objectif :** Réduire la surface d'attaque — sans dépendances lourdes, fonctionne hors ligne après la configuration initiale.
+**Objectif :** Réduire la surface d'attaque, sans dépendances lourdes, fonctionne hors ligne après la configuration initiale.
 
 **Distributions cibles** (répandues au Sénégal et dans le secteur public) :
 - Debian 11/12 ou Ubuntu LTS (largement utilisées, stables, communauté francophone active).
@@ -19,7 +19,7 @@ Les infrastructures critiques tournent souvent sur des serveurs Linux anciens ou
 
 ## 1. Mises à jour et gestion des correctifs
 
-Les correctifs comblent les vulnérabilités connues — faites-le régulièrement, même en mode hors ligne.
+Les correctifs comblent les vulnérabilités connues : faites-le régulièrement, même en mode hors ligne.
 
 **Debian/Ubuntu :**
 ```bash
@@ -55,7 +55,7 @@ Lister les services actifs :
 systemctl list-units --type=service
 ```
 
-Désactiver les risques courants (si non nécessaires — vérifiez d'abord votre charge de travail) :
+Désactiver les risques courants (si non nécessaires, vérifiez d'abord votre charge de travail) :
 ```bash
 sudo systemctl disable --now avahi-daemon      # Découverte mDNS
 sudo systemctl disable --now cups              # Impression
@@ -63,15 +63,15 @@ sudo systemctl disable --now bluetooth
 sudo systemctl mask rpcbind                    # RPC (souvent exploité)
 ```
 
-**Pour les serveurs web :** Désactivez si inutilisés — `apache2`/`httpd`, `nginx`.
+**Pour les serveurs web :** Désactivez si inutilisés : `apache2`/`httpd`, `nginx`.
 
 ---
 
-## 3. Pare-feu — Refus par défaut, ouverture au minimum
+## 3. Pare-feu : refus par défaut, ouverture au minimum
 
 Utilisez l'outil par défaut de la distribution.
 
-**Option A : UFW (Debian/Ubuntu — très simple) :**
+**Option A : UFW (Debian/Ubuntu, très simple) :**
 ```bash
 sudo apt install ufw   # si absent
 sudo ufw default deny incoming
@@ -82,7 +82,7 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
-**Option B : firewalld (Rocky/AlmaLinux — plus flexible avec les zones) :**
+**Option B : firewalld (Rocky/AlmaLinux, plus flexible avec les zones) :**
 ```bash
 sudo dnf install firewalld   # si nécessaire
 sudo systemctl enable --now firewalld
@@ -148,7 +148,7 @@ sudo systemctl enable --now fail2ban
 
 ## 6. Outils d'audit et de surveillance gratuits (faible consommation)
 
-**Lynis** (excellent audit, fonctionne hors ligne après installation) — lancez-le chaque semaine et examinez les recommandations :
+**Lynis** (excellent audit, fonctionne hors ligne après installation) : lancez-le chaque semaine et examinez les recommandations :
 ```bash
 # Debian/Ubuntu :
 sudo apt install lynis
@@ -162,11 +162,11 @@ sudo lynis audit system
 
 ---
 
-## 7. Contrôle d'accès obligatoire (MAC) — Contrôle d'exécution
+## 7. Contrôle d'accès obligatoire (MAC) : contrôle d'exécution
 
 Empêche les processus compromis d'accéder à des fichiers ou réseaux non autorisés, même s'ils s'exécutent en root.
 
-### Debian/Ubuntu — AppArmor (activé par défaut, basé sur les chemins, plus simple)
+### Debian/Ubuntu : AppArmor (activé par défaut, basé sur les chemins, plus simple)
 
 Vérifiez l'état : `aa-status`
 
@@ -177,7 +177,7 @@ sudo aa-enforce /usr/sbin/apache2          # Exemple pour Apache/Nginx
 ```
 
 Créer un profil personnalisé :
-Utilisez `aa-genprof /chemin/vers/binaire` (mode apprentissage interactif — commencez en complain).
+Utilisez `aa-genprof /chemin/vers/binaire` (mode apprentissage interactif, commencez en complain).
 Éditez `/etc/apparmor.d/usr.bin.monapp` et ajoutez les règles :
 ```
 /usr/bin/monapp {
@@ -192,7 +192,7 @@ Utilisez `aa-genprof /chemin/vers/binaire` (mode apprentissage interactif — co
 Rechargez : `sudo apparmor_parser -r /etc/apparmor.d/usr.bin.monapp`
 Passez en enforcing : `sudo aa-enforce /etc/apparmor.d/usr.bin.monapp`
 
-### Rocky/AlmaLinux — SELinux (activé par défaut en mode enforcing, basé sur les étiquettes)
+### Rocky/AlmaLinux : SELinux (activé par défaut en mode enforcing, basé sur les étiquettes)
 
 Vérifiez : `getenforce` ou `sestatus`
 
@@ -225,9 +225,9 @@ Essentiel en cas de vol physique, de perte ou de récupération forensique aprè
 
 **Pourquoi c'est important au Sénégal :** Protège les données sensibles (dossiers citoyens, données financières) en cas de vol ou de perte du matériel. Impact minimal sur les performances avec un CPU moderne.
 
-**À la configuration (recommandé) :** La plupart des installeurs (Debian/Rocky) proposent l'option LUKS + LVM — chiffrez les partitions racine et données.
+**À la configuration (recommandé) :** La plupart des installeurs (Debian/Rocky) proposent l'option LUKS + LVM, chiffrez les partitions racine et données.
 
-**Sur un système existant (avancé — sauvegardez d'abord) :**
+**Sur un système existant (avancé, sauvegardez d'abord) :**
 
 Pour une nouvelle partition (`/dev/sdb1` par exemple) :
 ```bash

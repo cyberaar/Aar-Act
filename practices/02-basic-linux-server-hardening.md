@@ -173,7 +173,7 @@ Use distro default (AppArmor on Debian family for simplicity; SELinux on Rocky f
 Critical for physical theft/loss or forensic recovery after breach. Use LUKS (built-in, standardized, low overhead with AES-NI).
 
 **Why in Senegal:** Protects sensitive data (citizen records, financials) if hardware stolen/lost. Minimal perf hit on modern CPUs.
-Setup during install (recommended): Most installers (Debian/Rocky) offer LUKS + LVM option—encrypt root + data partitions.
+Setup during install (recommended): Most installers (Debian/Rocky) offer LUKS + LVM option: encrypt root and data partitions.
 
 **Manual / Existing System (Advanced - Backup First):**
 - For new partition (/dev/sdb1 example):
